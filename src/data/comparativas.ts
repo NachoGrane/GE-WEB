@@ -33,8 +33,15 @@ export type Comparativa = {
   /** Artista, cuando hay permiso para nombrarlo. Si no, se omite y va solo el género. */
   artista?: string;
   genero: string;
-  /** Qué escuchar concretamente. Le da al visitante algo puntual en qué fijarse. */
-  queEscuchar: string;
+  /**
+   * Qué escuchar concretamente: le da al visitante algo puntual en qué fijarse
+   * y es lo que separa una demo de un argumento.
+   *
+   * Es opcional a propósito. Mientras esté vacío el reproductor simplemente no
+   * muestra la línea: preferible eso a inventar una descripción de una mezcla,
+   * que es justo el texto donde se nota si quien escribe escuchó o no.
+   */
+  queEscuchar?: string;
   /** Extensiones disponibles en public/audio/ para este slug. */
   formatos: string[];
 };
@@ -45,13 +52,44 @@ const definiciones: Comparativa[] = [
     titulo: 'El Manuscrito',
     artista: 'Lautaro',
     genero: 'Heavy metal',
-    // PENDIENTE: revisar con Ignacio. Es el texto que le dice al visitante en
-    // qué fijarse, y él va a ser mucho más preciso que este borrador.
+    // PENDIENTE: borrador para que Ignacio lo reescriba.
     queEscuchar:
       'Fijate cómo la voz se sostiene por encima del muro de guitarras sin gritar, y ' +
       'cómo el bombo y el bajo pasan de una masa confusa a dos cosas distintas que se ' +
       'pueden seguir por separado.',
-    formatos: ['m4a', 'webm'],
+    formatos: ['m4a'],
+  },
+  {
+    slug: 'yus-brillos',
+    titulo: 'Brillos',
+    artista: 'Yus',
+    genero: 'Pop',
+    // PENDIENTE: completar.
+    formatos: ['m4a'],
+  },
+  {
+    slug: 'popo-deper-armonia',
+    titulo: 'Armonía diferente',
+    artista: 'Popo Deper',
+    genero: 'Rock progresivo',
+    // PENDIENTE: completar.
+    formatos: ['m4a'],
+  },
+  {
+    slug: 'nacho-tuscanciones',
+    titulo: 'Tus canciones',
+    artista: 'Nax feat. Mochi',
+    genero: 'Pop',
+    // PENDIENTE: completar.
+    formatos: ['m4a'],
+  },
+  {
+    slug: 'mochi-atrasdelsol',
+    titulo: 'Atrás del sol',
+    artista: 'Mochi',
+    genero: 'Música popular',
+    // PENDIENTE: completar.
+    formatos: ['m4a'],
   },
 ];
 
@@ -62,7 +100,27 @@ export type DatosMedidos = {
   lufs: { before: number; after: number };
 };
 
-export type ComparativaCompleta = Comparativa & DatosMedidos;
+export type ComparativaCompleta = Comparativa &
+  DatosMedidos & {
+    /**
+     * Ganancia a aplicar a cada rama para que las dos suenen al mismo nivel.
+     * Ver `igualarSonoridad`.
+     */
+    ganancia: { before: number; after: number };
+  };
+
+/**
+ * Calcula la ganancia que deja las dos versiones a la misma sonoridad.
+ *
+ * Importa mucho: si el "después" está más fuerte, siempre va a sonar mejor, y
+ * la comparación deja de decir nada sobre la mezcla. Se iguala hacia abajo,
+ * atenuando la rama más fuerte y nunca amplificando, para no arriesgar recortes.
+ */
+function igualarSonoridad(lufs: { before: number; after: number }) {
+  const objetivo = Math.min(lufs.before, lufs.after);
+  const ganancia = (valor: number) => Number(Math.pow(10, (objetivo - valor) / 20).toFixed(4));
+  return { before: ganancia(lufs.before), after: ganancia(lufs.after) };
+}
 
 /** Une los textos con los datos medidos. Descarta las que no fueron analizadas. */
 export const comparativas: ComparativaCompleta[] = definiciones.flatMap((def) => {
@@ -71,5 +129,5 @@ export const comparativas: ComparativaCompleta[] = definiciones.flatMap((def) =>
     console.warn(`[comparativas] falta analizar "${def.slug}": corré npm run picos`);
     return [];
   }
-  return [{ ...def, ...medido }];
+  return [{ ...def, ...medido, ganancia: igualarSonoridad(medido.lufs) }];
 });

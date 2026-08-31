@@ -78,6 +78,13 @@ audio en el navegador solo para mostrar un gráfico.
 avisa si el `before` y el `after` difieren más de 1 LU. Esto importa: si el "después" está más
 fuerte, siempre va a sonar mejor y la comparación deja de ser honesta.
 
+Además el reproductor **iguala la sonoridad en la reproducción**: `igualarSonoridad()` en
+[src/data/comparativas.ts](src/data/comparativas.ts) calcula, a partir de las mediciones, una
+ganancia por rama que deja las dos versiones al mismo nivel. Iguala siempre hacia abajo —atenúa la
+más fuerte, nunca amplifica— para no arriesgar recortes. Es lo que permite publicar pares que no
+vinieron perfectamente igualados sin que la comparación mienta. No lo saques: sin eso el "después"
+gana por volumen y la sección deja de probar nada.
+
 Los archivos van en `public/audio/` como `<slug>.before.<ext>` y `<slug>.after.<ext>`. El orden de
 formatos está en `FORMATOS` en [src/data/comparativas.ts](src/data/comparativas.ts):
 
@@ -130,12 +137,13 @@ arriba, replanteala.
 
 Están marcados con `PENDIENTE` en el código. Queda uno solo:
 
-- el texto de "qué escuchar" de la comparativa (`comparativas.ts`) es un borrador, y lo tiene que
-  revisar Ignacio: es el único texto del sitio donde su criterio técnico gana por lejos.
+- los textos de "qué escuchar" de las comparativas (`comparativas.ts`). El de El Manuscrito es un
+  borrador y los otros cuatro están vacíos; los va completando Ignacio. El campo es opcional a
+  propósito: mientras esté vacío el reproductor no muestra la línea, que es preferible a inventar
+  una descripción de una mezcla que no se escuchó.
 
-Lo que sí conviene sumar cuando esté disponible: **más comparativas A/B de otros géneros**. Con una
-sola el argumento se sostiene, pero con tres el visitante encuentra una parecida a lo suyo. El
-procedimiento está en la sección de audio de más arriba.
+Mientras las tarjetas no tengan todas ese texto, las de una misma fila quedan con distinto alto y
+la grilla deja un hueco abajo en las más cortas. Se resuelve solo a medida que se completen.
 
 ## Verificación
 

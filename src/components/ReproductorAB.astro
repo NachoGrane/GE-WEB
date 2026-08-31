@@ -18,12 +18,12 @@ interface Props {
 }
 
 const { comparativa } = Astro.props;
-const { slug, titulo, artista, genero, queEscuchar, picos, duracion, formatos, lufs } = comparativa;
+const { slug, titulo, artista, genero, queEscuchar, picos, duracion, formatos, ganancia } =
+  comparativa;
 
 // Solo se ofrecen los formatos que realmente existen para esta comparativa.
 const fuentes = FORMATOS.filter((f) => formatos.includes(f.extension));
 
-const diferenciaLufs = Math.abs(lufs.after - lufs.before).toFixed(1);
 const credito = [artista, genero].filter(Boolean).join(' · ');
 ---
 
@@ -32,6 +32,8 @@ const credito = [artista, genero].filter(Boolean).join(' · ');
   data-reproductor-ab
   data-slug={slug}
   data-duracion={duracion}
+  data-ganancia-before={ganancia.before}
+  data-ganancia-after={ganancia.after}
 >
   <header class="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
     <div>
@@ -138,14 +140,13 @@ const credito = [artista, genero].filter(Boolean).join(' · ');
     </div>
   </div>
 
-  <p class="border-borde text-texto-suave mt-5 border-t pt-4 text-sm leading-relaxed">
-    <span class="text-texto font-medium">Qué escuchar:</span>{' '}{queEscuchar}
-  </p>
-
-  <p class="text-texto-tenue mt-3 text-xs">
-    Las dos versiones suenan al mismo nivel (diferencia de {diferenciaLufs} LU), así que lo que cambia
-    es la mezcla y no el volumen.
-  </p>
+  {
+    queEscuchar && (
+      <p class="border-borde text-texto-suave mt-5 border-t pt-4 text-sm leading-relaxed">
+        <span class="text-texto font-medium">Qué escuchar:</span> {queEscuchar}
+      </p>
+    )
+  }
 
   <!-- preload="none": mientras nadie toque play, el peso de audio de la página es cero. -->
   {

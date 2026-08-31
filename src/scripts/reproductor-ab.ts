@@ -12,6 +12,12 @@
 
 type Lado = 'before' | 'after';
 
+/**
+ * Todos los reproductores de la página. Con varias comparativas hace falta que
+ * arrancar una pause las otras: si no, se pisan entre sí.
+ */
+const montados: ReproductorAB[] = [];
+
 const CRUCE_SEGUNDOS = 0.04; // duración del cruce de volumen
 const DERIVA_MAXIMA = 0.05; // desincronización tolerada entre las dos ramas
 
@@ -38,6 +44,8 @@ class ReproductorAB {
   private contexto?: AudioContext;
   private ganancias?: Record<Lado, GainNode>;
   private lado: Lado = 'before';
+  /** Ganancia por rama que iguala la sonoridad de las dos versiones. */
+  private igualacion: Record<Lado, number>;
   private sonando = false;
   private preparado = false;
   private cuadro = 0;
@@ -55,6 +63,10 @@ class ReproductorAB {
     this.tiempo = raiz.querySelector('[data-tiempo]')!;
     this.total = raiz.querySelector('[data-total]')!;
     this.anchoOnda = this.recorte.ownerSVGElement?.viewBox.baseVal.width ?? 0;
+    this.igualacion = {
+      before: Number(raiz.dataset.gananciaBefore ?? 1),
+      after: Number(raiz.dataset.gananciaAfter ?? 1),
+    };
 
     if (!this.formatoSoportado()) {
       this.raiz.querySelector<HTMLElement>('[data-sin-soporte]')!.hidden = false;
@@ -130,7 +142,7 @@ class ReproductorAB {
     for (const lado of ['before', 'after'] as const) {
       const fuente = this.contexto.createMediaElementSource(this.audios[lado]);
       fuente.connect(this.ganancias[lado]).connect(this.contexto.destination);
-      this.ganancias[lado].gain.value = lado === this.lado ? 1 : 0;
+      this.ganancias[lado].gain.value = lado === this.lado ? this.igualacion[lado] : 0;
     }
     this.preparado = true;
   }
@@ -140,6 +152,9 @@ class ReproductorAB {
       this.detener(false);
       return;
     }
+
+    // Una sola comparativa sonando a la vez.
+    for (const otro of montados) if (otro !== this) otro.pausar();
 
     this.prepararAudio();
     await this.contexto?.resume();
@@ -158,6 +173,11 @@ class ReproductorAB {
     this.sonando = true;
     this.pintarPlay();
     this.animar();
+  }
+
+  /** Pausa sin volver al principio: la usa el resto de los reproductores. */
+  pausar() {
+    if (this.sonando) this.detener(false);
   }
 
   private detener(reiniciar = true) {
@@ -186,7 +206,10 @@ class ReproductorAB {
       const ganancia = this.ganancias[candidato].gain;
       ganancia.cancelScheduledValues(ahora);
       ganancia.setValueAtTime(ganancia.value, ahora);
-      ganancia.linearRampToValueAtTime(candidato === lado ? 1 : 0, ahora + CRUCE_SEGUNDOS);
+      ganancia.linearRampToValueAtTime(
+        candidato === lado ? this.igualacion[candidato] : 0,
+        ahora + CRUCE_SEGUNDOS
+      );
     }
   }
 
@@ -241,7 +264,9 @@ class ReproductorAB {
 }
 
 export function montarReproductores() {
-  document
-    .querySelectorAll<HTMLElement>('[data-reproductor-ab]')
-    .forEach((raiz) => new ReproductorAB(raiz));
+  document.querySelectorAll<HTMLElement>('[data-reproductor-ab]').forEach((raiz) => {
+    if (raiz.dataset.montado) return; // el script corre una vez por componente
+    raiz.dataset.montado = '1';
+    montados.push(new ReproductorAB(raiz));
+  });
 }

@@ -12,7 +12,7 @@ import { comparativas } from '@/data/comparativas';
   <TituloSeccion
     rotulo="Antes y después"
     titulo="Escuchá la diferencia"
-    bajada="Las dos versiones suenan al mismo tiempo y al mismo volumen. Cambiá entre una y otra cuando quieras: la reproducción no se corta, así comparás el mismo instante exacto de la canción."
+    bajada="Las dos versiones suenan al mismo tiempo. Cambiá entre una y otra cuando quieras: la reproducción no se corta, así comparás el mismo instante exacto de la canción."
   />
 
   <!-- Con una sola comparativa la grilla de dos columnas la deja flotando a
@@ -25,6 +25,11 @@ import { comparativas } from '@/data/comparativas';
   >
     {comparativas.map((comparativa) => <ReproductorAB comparativa={comparativa} />)}
   </div>
+
+  <p class="text-texto-tenue mt-6 max-w-2xl text-sm leading-relaxed">
+    Las dos versiones están igualadas en volumen: si el "después" sonara más fuerte parecería mejor
+    por eso solo, y la comparación no diría nada sobre la mezcla.
+  </p>
 
   {
     comparativas.length === 0 && (
