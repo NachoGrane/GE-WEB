@@ -1,0 +1,32 @@
+---
+/**
+ * Cómo se trabaja. Responde la pregunta que frena a un artista antes de
+ * escribir: no cuánto sale, sino cómo va a ser trabajar con esta persona.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import { proceso } from '@/data/proceso';
+---
+
+<section id="proceso" class="border-borde bg-fondo-hundido scroll-mt-24 border-y py-20 lg:py-28">
+  <div class="contenedor" data-revelar>
+    <TituloSeccion
+      rotulo="Proceso"
+      titulo="Cómo trabajamos"
+      bajada="Sin sorpresas y sin vueltas: sabés en todo momento en qué etapa está tu tema y qué falta para tenerlo listo."
+    />
+
+    <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
+      {
+        proceso.map((paso) => (
+          <li>
+            <span class="fuente-display text-marca/35 block text-5xl">{paso.numero}</span>
+            <h3 class="text-texto mt-3 font-sans text-lg font-semibold tracking-tight">
+              {paso.titulo}
+            </h3>
+            <p class="text-texto-suave mt-2 text-sm leading-relaxed">{paso.detalle}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

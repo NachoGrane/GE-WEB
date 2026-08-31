@@ -1,7 +1,6 @@
 node_modules
 dist
-build
-coverage
-.vite
-.yarn
+.astro
+public
+src/data/picos.json
 *.lock

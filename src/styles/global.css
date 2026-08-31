@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Tipografía
+
+   Los .woff2 salen de los paquetes @fontsource (ver package.json) y están
+   copiados en public/fonts/ para poder precargarlos con una ruta estable.
+   Solo se incluye el subconjunto latino: alcanza para el español, incluidas
+   las vocales acentuadas, la ñ y los signos de apertura.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Anton";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/anton-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-var.woff2") format("woff2-variations");
+}
+
+/* ==========================================================================
+   Tokens de marca
+
+   El olivo #8E8816 es el color exacto del manual de Grané Estudio: se extrajo
+   de los originales y es idéntico en las quince piezas de la gráfica.
+
+   Contrastes medidos contra el fondo #0A0A0A:
+     marca        #8E8816   5.36:1   AA — superficies y titulares, no texto chico
+     marca-clara  #B5AE2A   8.53:1   AAA — enlaces y texto chico
+     texto        #EDEAE3  16.48:1   AAA
+     texto-suave  #A8A49B   7.96:1   AAA
+     negro sobre marca      5.68:1   AA — botones olivo con texto negro
+
+   El olivo sobre blanco da 3.69:1, así que nunca se usa para texto chico en
+   claro: de ahí que el sitio sea oscuro. Además es lo que la marca ya es.
+   ========================================================================== */
+
+@theme {
+  --color-fondo: #0a0a0a;
+  --color-fondo-elevado: #131313;
+  --color-fondo-hundido: #050505;
+
+  --color-marca: #8e8816;
+  --color-marca-clara: #b5ae2a;
+  --color-marca-tenue: #221f08;
+
+  --color-texto: #edeae3;
+  --color-texto-suave: #a8a49b;
+  --color-texto-tenue: #6f6b63;
+
+  --color-borde: #262523;
+  --color-borde-fuerte: #3a3835;
+
+  --font-display: "Anton", "Arial Narrow", "Haettenschweiler", sans-serif;
+  --font-sans:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Escala fluida: un solo valor cubre de 360 px a 1440 px sin breakpoints. */
+  --text-titulo: clamp(2.75rem, 1.6rem + 5.1vw, 6.5rem);
+  --text-titulo--line-height: 0.92;
+  --text-seccion: clamp(2rem, 1.35rem + 2.9vw, 3.75rem);
+  --text-seccion--line-height: 0.98;
+  --text-bajada: clamp(1.0625rem, 1rem + 0.28vw, 1.25rem);
+  --text-bajada--line-height: 1.6;
+
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Deja aire bajo la barra fija al saltar por anclas. */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Anton es una display muy condensada: sin esto se ve suelta en titulares. */
+  .fuente-display,
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  ::selection {
+    background-color: var(--color-marca);
+    color: #000;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-marca-clara);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* El navegador no debe robar el foco visible en clicks de mouse. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Utilidades propias
+   ========================================================================== */
+
+@utility contenedor {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Aparición al hacer scroll
+
+   Se resuelve entero con CSS, sin JavaScript, usando líneas de tiempo de scroll.
+
+   Es a propósito que no haya un `opacity: 0` suelto esperando que algo lo
+   encienda: si ese algo falla, la página queda en blanco. Acá la animación solo
+   existe dentro del @supports, así que en un navegador que no la entienda el
+   contenido simplemente se ve, que es exactamente lo que tiene que pasar.
+
+   El rango termina en `entry 60%`: la sección queda visible apenas asoma, sin
+   depender de que haya scroll suficiente por debajo.
+   -------------------------------------------------------------------------- */
+
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-revelar] {
+      animation: revelar linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

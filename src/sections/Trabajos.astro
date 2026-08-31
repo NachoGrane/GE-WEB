@@ -1,0 +1,44 @@
+---
+/**
+ * La playlist de Spotify. Más de cien canciones publicadas es la credencial más
+ * fuerte que tiene el estudio.
+ *
+ * El iframe se carga en diferido y con la altura reservada: si no, mete un
+ * salto de layout al aparecer y arruina la métrica de estabilidad visual.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import { sitio } from '@/data/sitio';
+
+const idPlaylist = sitio.redes.spotify.split('/playlist/')[1]?.split('?')[0];
+const incrustado = `https://open.spotify.com/embed/playlist/${idPlaylist}?theme=0`;
+---
+
+<section id="trabajos" class="contenedor scroll-mt-24 py-20 lg:py-28" data-revelar>
+  <TituloSeccion
+    rotulo="Trabajos"
+    titulo="Más de cien canciones"
+    bajada="Una selección de temas que pasaron por el estudio. Si querés escuchar algo parecido a lo tuyo, pedímelo y te mando referencias del género."
+  />
+
+  <div class="border-borde bg-fondo-elevado mt-10 overflow-hidden rounded-2xl border lg:mt-12">
+    <iframe
+      src={incrustado}
+      title="Playlist de canciones mezcladas por Grané Estudio"
+      width="100%"
+      height="480"
+      loading="lazy"
+      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      class="block h-[30rem] w-full"></iframe>
+  </div>
+
+  <p class="text-texto-tenue mt-4 text-sm">
+    <a
+      href={sitio.redes.spotify}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-marca-clara hover:text-texto underline underline-offset-4"
+    >
+      Abrir la playlist completa en Spotify
+    </a>
+  </p>
+</section>

@@ -1,0 +1,38 @@
+---
+/**
+ * La landing completa. El orden de las secciones es el argumento de venta:
+ * primero qué ofrezco, después lo escuchás, después cuánto sale y cómo trabajo,
+ * después la prueba de trayectoria, y recién ahí pido que me escribas.
+ */
+import Base from '@/layouts/Base.astro';
+import Navegacion from '@/components/Navegacion.astro';
+import PieDePagina from '@/components/PieDePagina.astro';
+import WhatsAppFlotante from '@/components/WhatsAppFlotante.astro';
+
+import Hero from '@/sections/Hero.astro';
+import Escuchar from '@/sections/Escuchar.astro';
+import Servicios from '@/sections/Servicios.astro';
+import Proceso from '@/sections/Proceso.astro';
+import Trabajos from '@/sections/Trabajos.astro';
+import Sobre from '@/sections/Sobre.astro';
+import Preguntas from '@/sections/Preguntas.astro';
+import Contacto from '@/sections/Contacto.astro';
+---
+
+<Base>
+  <Navegacion />
+
+  <main id="contenido">
+    <Hero />
+    <Escuchar />
+    <Servicios />
+    <Proceso />
+    <Trabajos />
+    <Sobre />
+    <Preguntas />
+    <Contacto />
+  </main>
+
+  <PieDePagina />
+  <WhatsAppFlotante />
+</Base>

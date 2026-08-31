@@ -1,0 +1,36 @@
+---
+/**
+ * La comparativa A/B. Va arriba de todo a propósito: es lo único que demuestra
+ * de verdad el trabajo, y es lo que casi ningún estudio pone a mano.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import ReproductorAB from '@/components/ReproductorAB.astro';
+import { comparativas } from '@/data/comparativas';
+---
+
+<section id="escuchar" class="contenedor scroll-mt-24 py-20 lg:py-28" data-revelar>
+  <TituloSeccion
+    rotulo="Antes y después"
+    titulo="Escuchá la diferencia"
+    bajada="Las dos versiones suenan al mismo tiempo y al mismo volumen. Cambiá entre una y otra cuando quieras: la reproducción no se corta, así comparás el mismo instante exacto de la canción."
+  />
+
+  <!-- Con una sola comparativa la grilla de dos columnas la deja flotando a
+       media página: en ese caso va a lo ancho y con el ancho de lectura acotado. -->
+  <div
+    class:list={[
+      'mt-10 grid gap-6 lg:mt-12',
+      comparativas.length > 1 ? 'lg:grid-cols-2' : 'max-w-3xl',
+    ]}
+  >
+    {comparativas.map((comparativa) => <ReproductorAB comparativa={comparativa} />)}
+  </div>
+
+  {
+    comparativas.length === 0 && (
+      <p class="border-borde-fuerte text-texto-suave mt-10 rounded-2xl border border-dashed p-8 text-center">
+        Todavía no hay comparativas cargadas.
+      </p>
+    )
+  }
+</section>

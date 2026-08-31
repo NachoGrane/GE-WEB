@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://graneestudio.com.ar/sitemap-index.xml

@@ -1,0 +1,45 @@
+---
+/**
+ * Barra superior fija. En móvil desaparecen los enlaces y queda solo la marca
+ * y el botón de WhatsApp: el recorrido en celular es scrollear, no navegar.
+ */
+import Boton from '@/components/ui/Boton.astro';
+import { linkWhatsApp } from '@/data/sitio';
+import logotipo from '@/assets/logo/logotipo-sin-marco.svg?raw';
+
+const enlaces = [
+  { href: '#escuchar', texto: 'Escuchar' },
+  { href: '#servicios', texto: 'Servicios' },
+  { href: '#proceso', texto: 'Proceso' },
+  { href: '#trabajos', texto: 'Trabajos' },
+  { href: '#preguntas', texto: 'Preguntas' },
+];
+
+const wa = linkWhatsApp('Hola Ignacio, quiero consultarte por una mezcla.');
+---
+
+<header class="border-borde/80 bg-fondo/85 sticky top-0 z-40 border-b backdrop-blur-md">
+  <nav class="contenedor flex h-[4.5rem] items-center justify-between gap-6" aria-label="Principal">
+    <a
+      href="#inicio"
+      class="text-marca hover:text-marca-clara shrink-0 transition-colors"
+      aria-label="Grané Estudio, ir al inicio"
+    >
+      <span class="block w-[5.5rem] sm:w-24" set:html={logotipo} />
+    </a>
+
+    <ul class="text-texto-suave hidden items-center gap-8 text-sm lg:flex">
+      {
+        enlaces.map((enlace) => (
+          <li>
+            <a href={enlace.href} class="hover:text-texto transition-colors">
+              {enlace.texto}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <Boton href={wa} nuevaPestania class="shrink-0">Pedir presupuesto</Boton>
+  </nav>
+</header>

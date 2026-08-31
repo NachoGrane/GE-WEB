@@ -1,0 +1,168 @@
+---
+/**
+ * Comparador A/B entre la premezcla y la mezcla terminada.
+ *
+ * La idea central: las dos versiones suenan al mismo tiempo y sincronizadas, y
+ * el botón solo cruza el volumen de una a la otra. Nunca se reinicia ni se
+ * pausa, así que se compara exactamente el mismo instante de la canción. Un
+ * reproductor que arranca de cero al cambiar de versión no sirve para comparar.
+ *
+ * La forma de onda se dibuja con picos calculados de antemano (npm run picos),
+ * así que el navegador no decodifica audio solo para mostrar el gráfico.
+ */
+import type { ComparativaCompleta } from '@/data/comparativas';
+import { FORMATOS } from '@/data/comparativas';
+
+interface Props {
+  comparativa: ComparativaCompleta;
+}
+
+const { comparativa } = Astro.props;
+const { slug, titulo, genero, queEscuchar, picos, duracion, formatos, lufs } = comparativa;
+
+// Solo se ofrecen los formatos que realmente existen para esta comparativa.
+const fuentes = FORMATOS.filter((f) => formatos.includes(f.extension));
+
+const diferenciaLufs = Math.abs(lufs.after - lufs.before).toFixed(1);
+---
+
+<article
+  class="border-borde bg-fondo-elevado rounded-2xl border p-5 sm:p-7"
+  data-reproductor-ab
+  data-slug={slug}
+  data-duracion={duracion}
+>
+  <header class="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+    <div>
+      <h3 class="text-texto font-sans text-lg font-semibold tracking-tight">{titulo}</h3>
+      <p class="text-texto-tenue mt-0.5 text-sm">{genero}</p>
+    </div>
+
+    <!-- El selector es un grupo de radio: se opera con las flechas del teclado
+         y los lectores de pantalla anuncian cuál está activa. -->
+    <div
+      class="border-borde-fuerte flex shrink-0 rounded-full border p-1"
+      role="radiogroup"
+      aria-label={`Versión de ${titulo}`}
+    >
+      <button
+        type="button"
+        role="radio"
+        aria-checked="true"
+        data-lado="before"
+        class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
+      >
+        Antes
+      </button>
+      <button
+        type="button"
+        role="radio"
+        aria-checked="false"
+        data-lado="after"
+        class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
+      >
+        Después
+      </button>
+    </div>
+  </header>
+
+  <div class="mt-6 flex items-center gap-4 sm:gap-5">
+    <button
+      type="button"
+      data-play
+      class="bg-marca hover:bg-marca-clara grid size-14 shrink-0 place-items-center rounded-full text-black transition-colors"
+      aria-label={`Reproducir ${titulo}`}
+    >
+      <svg data-icono="play" viewBox="0 0 24 24" class="size-6 translate-x-px" aria-hidden="true">
+        <path fill="currentColor" d="M8 5.14v13.72L19 12z"></path>
+      </svg>
+      <svg data-icono="pausa" viewBox="0 0 24 24" class="hidden size-6" aria-hidden="true">
+        <path fill="currentColor" d="M7 5h3.5v14H7zm6.5 0H17v14h-3.5z"></path>
+      </svg>
+    </button>
+
+    <!-- La onda es también la barra de progreso: se puede clickear para saltar. -->
+    <div class="min-w-0 flex-1">
+      <div
+        data-onda
+        role="slider"
+        tabindex="0"
+        aria-label={`Posición en ${titulo}`}
+        aria-valuemin="0"
+        aria-valuemax={Math.round(duracion)}
+        aria-valuenow="0"
+        aria-valuetext="0 segundos"
+        class="group relative h-14 w-full cursor-pointer"
+      >
+        <svg
+          viewBox={`0 0 ${picos.length * 3} 100`}
+          preserveAspectRatio="none"
+          class="h-full w-full"
+          aria-hidden="true"
+        >
+          <defs>
+            <!-- Las barras se definen una sola vez y se referencian dos veces:
+                 la onda apagada y la parte ya reproducida en olivo. -->
+            <g id={`barras-${slug}`}>
+              {
+                picos.map((pico, i) => (
+                  <rect
+                    x={i * 3}
+                    y={50 - Math.max(pico, 3) / 2.4}
+                    width="2"
+                    height={Math.max(pico, 3) / 1.2}
+                    rx="1"
+                  />
+                ))
+              }
+            </g>
+            <clipPath id={`avance-${slug}`}>
+              <rect data-recorte x="0" y="0" width="0" height="100"></rect>
+            </clipPath>
+          </defs>
+
+          <use href={`#barras-${slug}`} class="text-borde-fuerte" fill="currentColor"></use>
+          <use
+            href={`#barras-${slug}`}
+            class="text-marca"
+            fill="currentColor"
+            clip-path={`url(#avance-${slug})`}></use>
+        </svg>
+      </div>
+
+      <div class="text-texto-tenue mt-1 flex justify-between font-sans text-xs tabular-nums">
+        <span data-tiempo>0:00</span>
+        <span data-total></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="border-borde text-texto-suave mt-5 border-t pt-4 text-sm leading-relaxed">
+    <span class="text-texto font-medium">Qué escuchar:</span>{' '}{queEscuchar}
+  </p>
+
+  <p class="text-texto-tenue mt-3 text-xs">
+    Las dos versiones suenan al mismo nivel (diferencia de {diferenciaLufs} LU), así que lo que cambia
+    es la mezcla y no el volumen.
+  </p>
+
+  <!-- preload="none": mientras nadie toque play, el peso de audio de la página es cero. -->
+  {
+    (['before', 'after'] as const).map((lado) => (
+      <audio data-audio={lado} preload="none" crossorigin="anonymous" controlslist="nodownload">
+        {fuentes.map((f) => (
+          <source src={`/audio/${slug}.${lado}.${f.extension}`} type={f.mime} />
+        ))}
+      </audio>
+    ))
+  }
+
+  <p data-sin-soporte hidden class="text-marca-clara mt-3 text-sm">
+    Tu navegador no puede reproducir este formato de audio. Escuchalo desde Chrome o Firefox.
+  </p>
+</article>
+
+<script>
+  import { montarReproductores } from '@/scripts/reproductor-ab';
+  montarReproductores();
+</script>

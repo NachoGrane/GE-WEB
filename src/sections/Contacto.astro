@@ -1,0 +1,207 @@
+---
+/**
+ * Contacto. Dos caminos a propósito:
+ *
+ *   WhatsApp para quien quiere respuesta ya, que es la mayoría.
+ *   Formulario para quien prefiere no dar su teléfono o escribe fuera de hora.
+ *
+ * Solo nombre, email y mensaje son obligatorios: cada campo obligatorio de más
+ * es una consulta menos. Los opcionales están para quien quiera dar contexto,
+ * y sirven para poder cotizar en el primer mensaje en vez de en el cuarto.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import Boton from '@/components/ui/Boton.astro';
+import Campo from '@/components/ui/Campo.astro';
+import { sitio, linkWhatsApp } from '@/data/sitio';
+import { servicios } from '@/data/servicios';
+
+const wa = linkWhatsApp('Hola Ignacio, quiero consultarte por una mezcla.');
+
+// El desplegable se arma solo desde servicios.ts: al sumar mastering aparece acá.
+const opcionesServicio = servicios.map((s) => ({ valor: s.nombre, texto: s.nombre }));
+
+const rangosPistas = [
+  'Hasta 16 pistas',
+  'Entre 16 y 32',
+  'Entre 32 y 48',
+  'Más de 48',
+  'Todavía no sé',
+].map((r) => ({ valor: r, texto: r }));
+---
+
+<section id="contacto" class="contenedor scroll-mt-24 py-20 lg:py-28" data-revelar>
+  <TituloSeccion
+    rotulo="Contacto"
+    titulo="Contame de tu tema"
+    bajada="Respondo todas las consultas. Si me pasás material y referencias, te llega la cotización con la primera respuesta."
+  />
+
+  <div class="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-5 lg:gap-8">
+    <!-- Camino rápido -->
+    <aside
+      class="border-marca/40 bg-marca-tenue flex flex-col rounded-2xl border p-7 lg:col-span-2 lg:p-8"
+    >
+      <h3 class="fuente-display text-texto text-3xl">La vía rápida</h3>
+      <p class="text-texto-suave mt-3">
+        Escribime por WhatsApp y arrancamos la charla ahora. Es por donde más rápido contesto.
+      </p>
+
+      <div class="mt-7">
+        <Boton href={wa} tamanio="grande" nuevaPestania class="w-full">
+          <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.17 1.7 2.6 4.13 3.64.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.05.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.77.95-.14.17-.28.19-.52.07-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.44-1.35-1.68-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.31-.02-.43-.06-.12-.53-1.32-.75-1.8-.19-.44-.38-.4-.53-.4z"
+            ></path>
+          </svg>
+          Abrir WhatsApp
+        </Boton>
+      </div>
+
+      <p class="text-texto-tenue mt-4 text-sm">{sitio.contacto.whatsappVisible}</p>
+
+      <p class="border-marca/20 text-texto-suave mt-auto border-t pt-6 text-sm">
+        Contame el estilo del tema, cuántas pistas tenés y para cuándo lo necesitás. Con eso ya
+        puedo darte un número.
+      </p>
+    </aside>
+
+    <!-- Formulario -->
+    <form
+      id="formulario"
+      action="https://api.web3forms.com/submit"
+      method="POST"
+      class="border-borde bg-fondo-elevado rounded-2xl border p-7 lg:col-span-3 lg:p-8"
+      novalidate
+    >
+      <input type="hidden" name="access_key" value={sitio.web3formsKey} />
+      <input type="hidden" name="subject" value="Nueva consulta desde graneestudio.com.ar" />
+      <input type="hidden" name="from_name" value="Web Grané Estudio" />
+
+      <!-- Trampa para robots: es invisible y ningún humano la completa. -->
+      <input
+        type="checkbox"
+        name="botcheck"
+        class="hidden"
+        style="display:none"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+      />
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <Campo nombre="nombre" etiqueta="Nombre" obligatorio autocomplete="name" />
+        <Campo nombre="email" etiqueta="Email" tipo="email" obligatorio autocomplete="email" />
+
+        <Campo nombre="proyecto" etiqueta="Nombre artístico o del proyecto" />
+        <Campo nombre="genero" etiqueta="Género musical" placeholder="Rock, trap, folclore…" />
+
+        <Campo
+          nombre="servicio"
+          etiqueta="Qué necesitás"
+          tipo="select"
+          opciones={opcionesServicio}
+        />
+        <Campo
+          nombre="pistas"
+          etiqueta="Cantidad de pistas"
+          tipo="select"
+          opciones={rangosPistas}
+        />
+
+        <Campo
+          nombre="telefono"
+          etiqueta="Teléfono o WhatsApp"
+          tipo="tel"
+          autocomplete="tel"
+          class="sm:col-span-1"
+        />
+        <Campo nombre="fecha" etiqueta="¿Para cuándo lo necesitás?" tipo="date" />
+
+        <Campo
+          nombre="material"
+          etiqueta="Link al material o a referencias"
+          tipo="url"
+          placeholder="https://"
+          ayuda="Drive, WeTransfer, Spotify o YouTube. Si puedo escucharlo, la cotización llega más precisa."
+          class="sm:col-span-2"
+        />
+
+        <Campo
+          nombre="mensaje"
+          etiqueta="Contame del tema"
+          tipo="textarea"
+          obligatorio
+          placeholder="Qué grabaste, qué buscás que pase con la mezcla, qué referencias tenés en la cabeza…"
+          class="sm:col-span-2"
+        />
+      </div>
+
+      <div class="mt-7 flex flex-wrap items-center gap-4">
+        <Boton type="submit" tamanio="grande" data-enviar>Enviar consulta</Boton>
+        <p class="text-texto-tenue text-xs">Te respondo dentro de las 24 horas.</p>
+      </div>
+
+      <p
+        data-estado
+        role="status"
+        aria-live="polite"
+        class="mt-4 hidden rounded-lg px-4 py-3 text-sm"
+      >
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const formulario = document.querySelector<HTMLFormElement>('#formulario');
+
+  if (formulario) {
+    const estado = formulario.querySelector<HTMLElement>('[data-estado]')!;
+    const boton = formulario.querySelector<HTMLButtonElement>('[data-enviar]')!;
+    const textoBoton = boton.textContent;
+
+    const mostrar = (mensaje: string, ok: boolean) => {
+      estado.textContent = mensaje;
+      estado.classList.remove('hidden');
+      estado.classList.toggle('bg-marca-tenue', ok);
+      estado.classList.toggle('text-marca-clara', ok);
+      estado.classList.toggle('bg-red-950', !ok);
+      estado.classList.toggle('text-red-300', !ok);
+    };
+
+    formulario.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+
+      // Validación nativa: los mensajes salen en el idioma del navegador.
+      if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+      }
+
+      boton.disabled = true;
+      boton.textContent = 'Enviando…';
+
+      try {
+        const respuesta = await fetch(formulario.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(formulario),
+        });
+
+        if (!respuesta.ok) throw new Error(String(respuesta.status));
+
+        formulario.reset();
+        mostrar('¡Listo! Tu consulta llegó. Te respondo dentro de las 24 horas.', true);
+      } catch {
+        mostrar(
+          'No pudimos enviar el formulario. Escribime por WhatsApp y lo resolvemos al toque.',
+          false
+        );
+      } finally {
+        boton.disabled = false;
+        boton.textContent = textoBoton;
+      }
+    });
+  }
+</script>

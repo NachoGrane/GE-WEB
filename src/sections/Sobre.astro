@@ -1,0 +1,44 @@
+---
+/**
+ * Quién está del otro lado. Contratar una mezcla es confiarle a alguien meses
+ * de trabajo propio: poner la cara importa más que cualquier lista de equipos.
+ *
+ * PENDIENTE: reemplazar el marcador por una foto real de Ignacio o del estudio.
+ * Cuando esté, va con <Image /> de astro:assets para que salga en AVIF/WebP.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import { sitio } from '@/data/sitio';
+import isotipo from '@/assets/logo/isotipo.svg?raw';
+---
+
+<section id="sobre" class="border-borde bg-fondo-hundido scroll-mt-24 border-y py-20 lg:py-28">
+  <div class="contenedor grid items-center gap-12 lg:grid-cols-2 lg:gap-16" data-revelar>
+    <div
+      class="border-borde bg-fondo-elevado grid aspect-[4/5] place-items-center rounded-2xl border sm:aspect-[3/2] lg:aspect-[4/5]"
+    >
+      <div class="text-marca/20 w-20" aria-hidden="true" set:html={isotipo} />
+      <span class="sr-only">Foto pendiente</span>
+    </div>
+
+    <div>
+      <TituloSeccion rotulo="Quién mezcla" titulo="Hola, soy Ignacio" />
+
+      <div class="text-bajada text-texto-suave mt-6 space-y-4">
+        <p>
+          Soy productor e ingeniero de mezcla. Hace más de {sitio.autor.aniosExperiencia} años que trabajo
+          con artistas independientes, y en el camino pasaron por mis manos más de {
+            sitio.autor.cancionesMezcladas
+          } canciones que hoy están publicadas.
+        </p>
+        <p>
+          Vengo de la producción, así que no escucho una mezcla solo como un problema técnico:
+          escucho una canción. Antes de mover un fader quiero entender qué querés contar, y mi
+          trabajo es que la técnica esté al servicio de eso y no al revés.
+        </p>
+        <p>
+          Trabajo desde {sitio.ubicacion.ciudad} para artistas de todo el país y del exterior.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

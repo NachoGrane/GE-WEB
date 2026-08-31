@@ -1,0 +1,63 @@
+---
+import { sitio } from '@/data/sitio';
+import logotipo from '@/assets/logo/logotipo-sin-marco.svg?raw';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="border-borde border-t py-14">
+  <div class="contenedor">
+    <div class="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <span class="text-marca block w-28" set:html={logotipo} />
+        <p class="text-texto-tenue mt-4 max-w-xs text-sm">
+          Mezcla musical desde {sitio.ubicacion.ciudad}, {sitio.ubicacion.provincia}, para {
+            sitio.ubicacion.alcance.toLowerCase()
+          }.
+        </p>
+      </div>
+
+      <nav class="flex flex-col gap-3 text-sm" aria-label="Enlaces del pie">
+        <a href="#escuchar" class="text-texto-suave hover:text-texto transition-colors">
+          Escuchar el antes y después
+        </a>
+        <a href="#servicios" class="text-texto-suave hover:text-texto transition-colors">
+          Servicios
+        </a>
+        <a href="#contacto" class="text-texto-suave hover:text-texto transition-colors">
+          Contacto
+        </a>
+      </nav>
+
+      <div class="flex flex-col gap-3 text-sm">
+        <a
+          href={sitio.redes.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-texto-suave hover:text-texto transition-colors"
+        >
+          Instagram
+        </a>
+        <a
+          href={sitio.redes.spotify}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-texto-suave hover:text-texto transition-colors"
+        >
+          Playlist en Spotify
+        </a>
+        <a
+          href={`mailto:${sitio.contacto.email}`}
+          class="text-texto-suave hover:text-texto transition-colors"
+        >
+          {sitio.contacto.email}
+        </a>
+      </div>
+    </div>
+
+    <p class="border-borde text-texto-tenue mt-12 border-t pt-6 text-xs">
+      © {anio}
+      {sitio.nombre}. {sitio.autor.nombre}.
+    </p>
+  </div>
+</footer>
