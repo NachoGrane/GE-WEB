@@ -31,25 +31,32 @@ export const sitio = {
   },
 
   contacto: {
-    // PENDIENTE confirmar: viene del proyecto anterior.
     whatsapp: '5492213531354',
     whatsappVisible: '+54 9 221 353-1354',
-    // PENDIENTE: definir a qué casilla deben llegar las consultas.
-    email: 'hola@graneestudio.com.ar',
+    email: 'estudiograne@gmail.com',
   },
 
   redes: {
-    // PENDIENTE: usuario real de Instagram.
     instagram: 'https://instagram.com/graneestudio',
     spotify: 'https://open.spotify.com/playlist/7uYuRVRZWiuVyfJP9Sowqs',
   },
 
   /**
-   * Clave pública de Web3Forms para el formulario. Es pública por diseño:
-   * identifica el formulario, no da acceso a nada.
-   * PENDIENTE: generar en https://web3forms.com y pegar acá.
+   * Clave de Web3Forms del formulario de contacto.
+   *
+   * Va escrita acá y no en un secreto del repositorio a propósito: es pública
+   * por diseño, viaja dentro del HTML de cualquier formulario de Web3Forms y lo
+   * único que hace es dirigir el envío a la casilla de Ignacio. Guardarla como
+   * secreto daría una falsa sensación de protección y sumaría un motivo más
+   * para que el deploy falle en silencio.
+   *
+   * La variable de entorno permite apuntar a otra casilla para probar sin tocar
+   * el código.
    */
-  web3formsKey: import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '',
+  // Se usa || y no ??: una variable de entorno definida pero vacía (lo que pasa
+  // si el entorno la declara sin valor) tiene que caer igual en la clave real.
+  // Con ?? el formulario se publicaría sin clave y fallaría en silencio.
+  web3formsKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || '9f5e9bd1-fbc3-41a4-8eae-fafc8bdd819c',
 } as const;
 
 /**

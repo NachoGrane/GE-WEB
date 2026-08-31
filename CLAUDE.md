@@ -116,9 +116,9 @@ Push a `main` → GitHub Actions → GitHub Pages, dominio propio `graneestudio.
 ([public/CNAME](public/CNAME); tiene que estar en `public/` para entrar en el artefacto publicado).
 El trabajo diario va en ramas; mergear a `main` es la acción de deploy.
 
-La clave de Web3Forms del formulario se carga como el secreto de repositorio
-`PUBLIC_WEB3FORMS_KEY` (ver [.env.example](.env.example)). Es pública por diseño: identifica al
-formulario y no da acceso a nada.
+La clave de Web3Forms del formulario está escrita en `src/data/sitio.ts`, no en un secreto: es
+pública por diseño y viaja dentro del HTML igual. La variable `PUBLIC_WEB3FORMS_KEY` existe solo
+para desviar los envíos a otra casilla mientras se prueba (ver [.env.example](.env.example)).
 
 ## Presupuesto de performance
 
@@ -128,14 +128,14 @@ arriba, replanteala.
 
 ## Pendientes de contenido
 
-Están marcados con `PENDIENTE` en el código. Los principales, todos en `src/data/` salvo el último:
+Están marcados con `PENDIENTE` en el código. Queda uno solo:
 
-- precios reales de los servicios (`servicios.ts` muestra "A cotizar" mientras tanto)
-- email de contacto, usuario de Instagram y confirmación del número de WhatsApp (`sitio.ts`)
-- clave de Web3Forms
-- datos reales del tema de la comparativa (`comparativas.ts`)
-- versiones `.m4a` de los audios, sin las cuales no hay audio en iPhone
-- foto de Ignacio o del estudio, hoy un marcador en `src/sections/Sobre.astro`
+- el texto de "qué escuchar" de la comparativa (`comparativas.ts`) es un borrador, y lo tiene que
+  revisar Ignacio: es el único texto del sitio donde su criterio técnico gana por lejos.
+
+Lo que sí conviene sumar cuando esté disponible: **más comparativas A/B de otros géneros**. Con una
+sola el argumento se sostiene, pero con tres el visitante encuentra una parecida a lo suyo. El
+procedimiento está en la sección de audio de más arriba.
 
 ## Verificación
 

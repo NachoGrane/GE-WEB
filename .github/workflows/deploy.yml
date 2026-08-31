@@ -27,8 +27,6 @@ jobs:
       # `npm run build` corre astro check antes de compilar: si hay un error de
       # tipos o una referencia rota, el deploy falla acá y no en producción.
       - run: npm run build
-        env:
-          PUBLIC_WEB3FORMS_KEY: ${{ secrets.PUBLIC_WEB3FORMS_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist

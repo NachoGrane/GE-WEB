@@ -65,13 +65,21 @@ function serviciosOfrecidos() {
     serviceType: servicio.nombre,
     provider: { '@id': ID_NEGOCIO },
     areaServed: { '@type': 'Country', name: 'Argentina' },
+    // Una oferta por moneda: hay clientes dentro y fuera del país.
     ...(servicio.desde !== null && {
-      offers: {
+      offers: [
+        { moneda: 'ARS', precio: servicio.desde.ars },
+        { moneda: 'USD', precio: servicio.desde.usd },
+      ].map(({ moneda, precio }) => ({
         '@type': 'Offer',
-        price: servicio.desde,
-        priceCurrency: servicio.moneda,
+        priceCurrency: moneda,
         availability: 'https://schema.org/InStock',
-      },
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          minPrice: precio,
+          priceCurrency: moneda,
+        },
+      })),
     }),
   }));
 }

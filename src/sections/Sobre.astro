@@ -2,23 +2,28 @@
 /**
  * Quién está del otro lado. Contratar una mezcla es confiarle a alguien meses
  * de trabajo propio: poner la cara importa más que cualquier lista de equipos.
- *
- * PENDIENTE: reemplazar el marcador por una foto real de Ignacio o del estudio.
- * Cuando esté, va con <Image /> de astro:assets para que salga en AVIF/WebP.
  */
+import { Picture } from 'astro:assets';
 import TituloSeccion from '@/components/ui/TituloSeccion.astro';
 import { sitio } from '@/data/sitio';
-import isotipo from '@/assets/logo/isotipo.svg?raw';
+import estudio from '@/assets/fotos/estudio.jpg';
 ---
 
 <section id="sobre" class="border-borde bg-fondo-hundido scroll-mt-24 border-y py-20 lg:py-28">
   <div class="contenedor grid items-center gap-12 lg:grid-cols-2 lg:gap-16" data-revelar>
-    <div
-      class="border-borde bg-fondo-elevado grid aspect-[4/5] place-items-center rounded-2xl border sm:aspect-[3/2] lg:aspect-[4/5]"
-    >
-      <div class="text-marca/20 w-20" aria-hidden="true" set:html={isotipo} />
-      <span class="sr-only">Foto pendiente</span>
-    </div>
+    <!-- Picture y no Image: AVIF pesa la mitad pero recién lo soporta Safari
+         16.4, así que WebP queda de respaldo y el JPEG original como última
+         opción. Astro escribe width y height, así que no hay salto de layout. -->
+    <Picture
+      src={estudio}
+      alt="Ignacio Grané mezclando en el estudio, con la sesión y los ecualizadores en pantalla"
+      widths={[480, 720, 1080]}
+      sizes="(min-width: 1024px) 45vw, 100vw"
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      quality={72}
+      class="border-borde aspect-square w-full rounded-2xl border object-cover"
+    />
 
     <div>
       <TituloSeccion rotulo="Quién mezcla" titulo="Hola, soy Ignacio" />

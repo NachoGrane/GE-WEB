@@ -17,8 +17,13 @@ import { servicios } from '@/data/servicios';
 
 const wa = linkWhatsApp('Hola Ignacio, quiero consultarte por una mezcla.');
 
-// El desplegable se arma solo desde servicios.ts: al sumar mastering aparece acá.
+/**
+ * El desplegable de servicio se arma solo desde servicios.ts, y aparece recién
+ * cuando hay más de uno: con un único servicio no hay nada que elegir y sería
+ * un campo de más. Al sumar mastering se muestra automáticamente.
+ */
 const opcionesServicio = servicios.map((s) => ({ valor: s.nombre, texto: s.nombre }));
+const mostrarServicio = servicios.length > 1;
 
 const rangosPistas = [
   'Hasta 16 pistas',
@@ -96,12 +101,16 @@ const rangosPistas = [
         <Campo nombre="proyecto" etiqueta="Nombre artístico o del proyecto" />
         <Campo nombre="genero" etiqueta="Género musical" placeholder="Rock, trap, folclore…" />
 
-        <Campo
-          nombre="servicio"
-          etiqueta="Qué necesitás"
-          tipo="select"
-          opciones={opcionesServicio}
-        />
+        {
+          mostrarServicio && (
+            <Campo
+              nombre="servicio"
+              etiqueta="Qué necesitás"
+              tipo="select"
+              opciones={opcionesServicio}
+            />
+          )
+        }
         <Campo
           nombre="pistas"
           etiqueta="Cantidad de pistas"

@@ -30,6 +30,8 @@ export const FORMATOS = [
 export type Comparativa = {
   slug: string;
   titulo: string;
+  /** Artista, cuando hay permiso para nombrarlo. Si no, se omite y va solo el género. */
+  artista?: string;
   genero: string;
   /** Qué escuchar concretamente. Le da al visitante algo puntual en qué fijarse. */
   queEscuchar: string;
@@ -40,14 +42,16 @@ export type Comparativa = {
 const definiciones: Comparativa[] = [
   {
     slug: 'el-manuscrito',
-    // PENDIENTE: confirmar con Ignacio el nombre del tema, el artista (si hay
-    // permiso para nombrarlo) y el género.
     titulo: 'El Manuscrito',
-    genero: 'Rock',
+    artista: 'Lautaro',
+    genero: 'Heavy metal',
+    // PENDIENTE: revisar con Ignacio. Es el texto que le dice al visitante en
+    // qué fijarse, y él va a ser mucho más preciso que este borrador.
     queEscuchar:
-      'Fijate cómo aparece la voz al frente sin taparse con las guitarras, y cómo la ' +
-      'batería gana cuerpo y definición.',
-    formatos: ['webm'],
+      'Fijate cómo la voz se sostiene por encima del muro de guitarras sin gritar, y ' +
+      'cómo el bombo y el bajo pasan de una masa confusa a dos cosas distintas que se ' +
+      'pueden seguir por separado.',
+    formatos: ['m4a', 'webm'],
   },
 ];
 

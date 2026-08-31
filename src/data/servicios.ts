@@ -4,7 +4,8 @@
  * Agregar un servicio nuevo (mastering, por ejemplo) es agregar un objeto acá.
  * Con eso solo aparecen automáticamente:
  *   - la tarjeta en la sección Servicios
- *   - la opción en el desplegable del formulario de contacto
+ *   - la opción en el desplegable del formulario de contacto, que se muestra
+ *     recién cuando hay más de un servicio
  *   - el bloque Service en los datos estructurados para Google
  * No hay que tocar ningún componente.
  */
@@ -15,12 +16,12 @@ export type Servicio = {
   nombre: string;
   /** Una línea que aclara para quién es. */
   resumen: string;
-  /** Precio de referencia, en pesos. null muestra "a cotizar". */
-  desde: number | null;
-  moneda: 'ARS';
+  /**
+   * Precio de referencia. Se muestra en las dos monedas porque hay clientes
+   * dentro y fuera del país. null muestra "a cotizar".
+   */
+  desde: { ars: number; usd: number } | null;
   incluye: string[];
-  /** Resalta la tarjeta como opción sugerida. Solo una debería tenerlo. */
-  destacado?: boolean;
 };
 
 export const servicios: Servicio[] = [
@@ -28,35 +29,21 @@ export const servicios: Servicio[] = [
     slug: 'mezcla',
     nombre: 'Mezcla',
     resumen: 'Para el artista que ya grabó y quiere que su tema suene terminado.',
-    // PENDIENTE: precio real.
-    desde: null,
-    moneda: 'ARS',
+    desde: { ars: 90000, usd: 70 },
     incluye: [
       'Hasta 40 pistas',
       '2 rondas de revisión',
       'Entrega en WAV 24 bits y MP3',
       'Versiones instrumental y a capela',
     ],
-    destacado: true,
-  },
-  {
-    slug: 'mezcla-stems',
-    nombre: 'Mezcla por stems',
-    resumen: 'Cuando ya tenés una premezcla armada y buscás terminación y pegada.',
-    // PENDIENTE: precio real.
-    desde: null,
-    moneda: 'ARS',
-    incluye: [
-      'Hasta 12 stems',
-      '1 ronda de revisión',
-      'Entrega en WAV 24 bits y MP3',
-      'Entrega rápida',
-    ],
   },
 ];
 
-/** Formatea el precio para mostrar. */
-export function precioDesde(servicio: Servicio): string {
-  if (servicio.desde === null) return 'A cotizar';
-  return `Desde $${servicio.desde.toLocaleString('es-AR')}`;
+/** El precio listo para mostrar, en las dos monedas. */
+export function precioDesde(servicio: Servicio): { principal: string; alterno?: string } {
+  if (servicio.desde === null) return { principal: 'A cotizar' };
+  return {
+    principal: `Desde $${servicio.desde.ars.toLocaleString('es-AR')}`,
+    alterno: `o USD ${servicio.desde.usd}`,
+  };
 }
