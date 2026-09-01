@@ -16,7 +16,7 @@ export const sitio = {
     'mezcladas. Escuchá el antes y el después, y pedí tu presupuesto por WhatsApp.',
 
   autor: {
-    nombre: 'Ignacio Grané',
+    nombre: 'Nacho Grané',
     rol: 'Ingeniero de mezcla y productor musical',
     aniosExperiencia: 10,
     cancionesMezcladas: 100,
@@ -46,7 +46,7 @@ export const sitio = {
    *
    * Va escrita acá y no en un secreto del repositorio a propósito: es pública
    * por diseño, viaja dentro del HTML de cualquier formulario de Web3Forms y lo
-   * único que hace es dirigir el envío a la casilla de Ignacio. Guardarla como
+   * único que hace es dirigir el envío a la casilla de Nacho. Guardarla como
    * secreto daría una falsa sensación de protección y sumaría un motivo más
    * para que el deploy falle en silencio.
    *
@@ -62,7 +62,7 @@ export const sitio = {
 /**
  * Arma un enlace a WhatsApp con un mensaje distinto según desde dónde se hizo
  * click. No es lo mismo quien viene del hero que quien viene de un servicio:
- * el mensaje precargado le ahorra a Ignacio la primera pregunta.
+ * el mensaje precargado le ahorra a Nacho la primera pregunta.
  */
 export function linkWhatsApp(mensaje: string): string {
   return `https://wa.me/${sitio.contacto.whatsapp}?text=${encodeURIComponent(mensaje)}`;

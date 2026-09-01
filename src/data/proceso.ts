@@ -2,7 +2,7 @@
  * Los pasos de trabajo. Es la sección que responde la pregunta que todo
  * artista se hace antes de contratar: "¿cómo es trabajar con esta persona?".
  *
- * Textos borrador para revisar con Ignacio.
+ * Textos borrador para revisar con Nacho.
  */
 
 export type Paso = {
@@ -37,7 +37,6 @@ export const proceso: Paso[] = [
     numero: '04',
     titulo: 'Entrega',
     detalle:
-      'Te llevás los archivos finales en WAV y MP3, más instrumental y a capela para ' +
-      'que puedas usarlos en vivo, en redes o donde los necesites.',
+      'Te llevás los archivos finales en WAV y MP3, más stems para usarlos en vivo, en redes o donde los necesites. Una mezcla lista para masterizar.',
   },
 ];

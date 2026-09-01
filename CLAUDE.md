@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this
 repository.
 
-Landing page de una sola página para **Grané Estudio**, el servicio de mezcla musical de Ignacio
+Landing page de una sola página para **Grané Estudio**, el servicio de mezcla musical de Nacho
 Grané. El sitio y sus comentarios están en español rioplatense (voseo); mantené esa voz al escribir
 texto visible o comentarios nuevos.
 
@@ -138,7 +138,7 @@ arriba, replanteala.
 Están marcados con `PENDIENTE` en el código. Queda uno solo:
 
 - los textos de "qué escuchar" de las comparativas (`comparativas.ts`). El de El Manuscrito es un
-  borrador y los otros cuatro están vacíos; los va completando Ignacio. El campo es opcional a
+  borrador y los otros cuatro están vacíos; los va completando Nacho. El campo es opcional a
   propósito: mientras esté vacío el reproductor no muestra la línea, que es preferible a inventar
   una descripción de una mezcla que no se escuchó.
 

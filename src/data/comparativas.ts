@@ -52,11 +52,6 @@ const definiciones: Comparativa[] = [
     titulo: 'El Manuscrito',
     artista: 'Lautaro',
     genero: 'Heavy metal',
-    // PENDIENTE: borrador para que Ignacio lo reescriba.
-    queEscuchar:
-      'Fijate cómo la voz se sostiene por encima del muro de guitarras sin gritar, y ' +
-      'cómo el bombo y el bajo pasan de una masa confusa a dos cosas distintas que se ' +
-      'pueden seguir por separado.',
     formatos: ['m4a'],
   },
   {

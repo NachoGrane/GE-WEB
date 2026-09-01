@@ -31,10 +31,10 @@ export const servicios: Servicio[] = [
     resumen: 'Para el artista que ya grabó y quiere que su tema suene terminado.',
     desde: { ars: 90000, usd: 70 },
     incluye: [
-      'Hasta 40 pistas',
-      '2 rondas de revisión',
-      'Entrega en WAV 24 bits y MP3',
-      'Versiones instrumental y a capela',
+      'Hasta 60 pistas',
+      'Sin límite de revisiones',
+      'Entrega en WAV y MP3',
+      'Archivo preparado para masterizar donde gustes'
     ],
   },
 ];

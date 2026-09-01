@@ -12,7 +12,7 @@ import { servicios } from '@/data/servicios';
 import { faq } from '@/data/faq';
 
 const ID_NEGOCIO = `${sitio.dominio}/#negocio`;
-const ID_PERSONA = `${sitio.dominio}/#ignacio`;
+const ID_PERSONA = `${sitio.dominio}/#Nacho`;
 
 /** El estudio como prestador de servicios. */
 function negocio() {
@@ -42,7 +42,7 @@ function negocio() {
   };
 }
 
-/** Ignacio como profesional. Sostiene las búsquedas por su nombre. */
+/** Nacho como profesional. Sostiene las búsquedas por su nombre. */
 function persona() {
   return {
     '@type': 'Person',

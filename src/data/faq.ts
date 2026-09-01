@@ -8,7 +8,7 @@
  * Las respuestas conviene que sean completas y en una sola pieza: Google no
  * indexa bien respuestas que dependen de leer otra parte de la página.
  *
- * Textos borrador para revisar con Ignacio.
+ * Textos borrador para revisar con Nacho.
  */
 
 export type Pregunta = {
@@ -27,15 +27,15 @@ export const faq: Pregunta[] = [
   {
     pregunta: '¿Cómo tengo que exportar las pistas?',
     respuesta:
-      'En WAV de 24 bits, todas desde el mismo punto de inicio del proyecto, sin efectos ' +
-      'de master y sin que ninguna pista llegue a saturar. Cuando arrancamos te paso una ' +
+      'En WAV de respetando los bits y frecuencia de muestreo utilizados para grabar, todas desde el mismo punto de inicio del proyecto, sin efectos ' +
+      'de master y sin que ninguna pista llegue a saturar/clippear. Cuando arrancamos te paso una ' +
       'guía con el paso a paso para tu programa. Si tenés dudas, mandame el proyecto y lo ' +
       'revisamos juntos antes de que exportes.',
   },
   {
     pregunta: '¿Cuántas revisiones incluye?',
     respuesta:
-      'Dos rondas de revisión en el servicio de mezcla y una en la mezcla por stems. En la ' +
+      'En la ' +
       'práctica trabajo hasta que la mezcla esté bien: las rondas son para ordenar el ' +
       'proceso, no para cortarlo por la mitad.',
   },
