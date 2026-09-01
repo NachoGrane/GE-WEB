@@ -1,0 +1,95 @@
+---
+/**
+ * Servicios. Las tarjetas salen de src/data/servicios.ts: sumar mastering es
+ * agregar un objeto ahí, sin tocar este archivo.
+ *
+ * Con un solo servicio la tarjeta se despliega a lo ancho y se ordena en dos
+ * columnas por dentro. Una tarjeta suelta dentro de una grilla pensada para
+ * varias se lee como si faltara algo.
+ */
+import TituloSeccion from '@/components/ui/TituloSeccion.astro';
+import Boton from '@/components/ui/Boton.astro';
+import { servicios, precioDesde } from '@/data/servicios';
+import { linkWhatsApp } from '@/data/sitio';
+
+const unico = servicios.length === 1;
+---
+
+<section id="servicios" class="contenedor scroll-mt-24 py-20 lg:py-28" data-revelar>
+  <TituloSeccion
+    rotulo="Servicios"
+    titulo="Cómo puedo ayudarte"
+    bajada="El precio final depende de la cantidad de pistas y de la complejidad del tema. Escribime y te paso una cotización concreta el mismo día."
+  />
+
+  <div
+    class:list={[
+      'mt-10 grid gap-6 lg:mt-12',
+      servicios.length === 2 && 'lg:grid-cols-2',
+      servicios.length >= 3 && 'md:grid-cols-2 lg:grid-cols-3',
+    ]}
+  >
+    {
+      servicios.map((servicio) => {
+        const precio = precioDesde(servicio);
+        return (
+          <article class="border-marca/40 bg-marca-tenue rounded-2xl border p-7 sm:p-9">
+            <div class:list={['gap-8 lg:gap-14', unico && 'lg:grid lg:grid-cols-5']}>
+              <div class="lg:col-span-3">
+                <h3 class="fuente-display text-texto text-3xl sm:text-4xl">{servicio.nombre}</h3>
+                <p class="text-texto-suave mt-3 max-w-md">{servicio.resumen}</p>
+
+                <p class="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span class="text-marca-clara font-sans text-3xl font-semibold tracking-tight">
+                    {precio.principal}
+                  </span>
+                  {precio.alterno && (
+                    <span class="text-texto-tenue text-base">{precio.alterno}</span>
+                  )}
+                </p>
+
+                <div class="mt-8">
+                  <Boton
+                    href={linkWhatsApp(
+                      `Hola Nacho, cómo va? me interesa el servicio de ${servicio.nombre}. ¿Me pasás una cotización?`
+                    )}
+                    tamanio="grande"
+                    nuevaPestania
+                    class={unico ? '' : 'w-full'}
+                  >
+                    Pedir cotización
+                  </Boton>
+                </div>
+              </div>
+
+              <ul
+                class:list={[
+                  'border-borde text-texto-suave space-y-3 text-sm',
+                  unico
+                    ? 'mt-8 border-t pt-8 lg:col-span-2 lg:mt-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-14'
+                    : 'mt-8 border-t pt-8',
+                ]}
+              >
+                {servicio.incluye.map((item) => (
+                  <li class="flex gap-3">
+                    <svg
+                      viewBox="0 0 20 20"
+                      class="text-marca mt-0.5 size-4 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M8.2 13.6 4.9 10.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"
+                      />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+</section>

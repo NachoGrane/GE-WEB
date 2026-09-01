@@ -1,17 +1,11 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.app.json" }
-  ],
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] },
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "types": ["vite/client", "node"],
-    "jsx": "react-jsx",
-    "strict": true
-  },
-  "include": ["src"]
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
 }

@@ -1,0 +1,57 @@
+---
+/**
+ * Botón / enlace de acción.
+ *
+ * Se renderiza como <a> si recibe href y como <button> si no. Los dos estilos
+ * cubren toda la página: no hace falta un tercero.
+ */
+interface Props {
+  href?: string;
+  variante?: 'principal' | 'secundario';
+  tamanio?: 'normal' | 'grande';
+  nuevaPestania?: boolean;
+  type?: 'button' | 'submit';
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variante = 'principal',
+  tamanio = 'normal',
+  nuevaPestania = false,
+  type = 'button',
+  class: clase = '',
+  ...resto
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight ' +
+  'transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50';
+
+// El negro sobre olivo da 5.68:1 de contraste, así que el botón lleno pasa AA.
+const variantes = {
+  principal: 'bg-marca text-black hover:bg-marca-clara',
+  secundario: 'border border-borde-fuerte text-texto hover:border-marca hover:text-marca-clara',
+};
+
+const tamanios = {
+  normal: 'px-5 py-2.5 text-sm',
+  grande: 'px-7 py-3.5 text-base',
+};
+
+const clases = [base, variantes[variante], tamanios[tamanio], clase].join(' ');
+const externo = nuevaPestania ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+{
+  href ? (
+    <a href={href} class={clases} {...externo} {...resto}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={clases} {...resto}>
+      <slot />
+    </button>
+  )
+}

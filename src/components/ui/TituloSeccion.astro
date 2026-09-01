@@ -1,0 +1,25 @@
+---
+/**
+ * Encabezado de sección: un rótulo chico en olivo, el título y una bajada.
+ *
+ * Todas las secciones lo usan, así que el ritmo vertical y la jerarquía
+ * tipográfica quedan iguales en toda la página sin repetir clases.
+ */
+interface Props {
+  rotulo: string;
+  titulo: string;
+  bajada?: string;
+  /** Centrado solo donde el contenido que sigue también lo está. */
+  centrado?: boolean;
+}
+
+const { rotulo, titulo, bajada, centrado = false } = Astro.props;
+---
+
+<div class={centrado ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
+  <p class="text-marca-clara font-sans text-xs font-semibold tracking-[0.2em] uppercase">
+    {rotulo}
+  </p>
+  <h2 class="text-seccion text-texto mt-3">{titulo}</h2>
+  {bajada && <p class="text-bajada text-texto-suave mt-4">{bajada}</p>}
+</div>

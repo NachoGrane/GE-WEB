@@ -1,0 +1,74 @@
+---
+/**
+ * Primera pantalla. Tiene que decir en dos segundos qué se ofrece, para quién,
+ * y llevar a escuchar el trabajo: en un estudio de mezcla el argumento de venta
+ * es el audio, no el texto.
+ */
+import Boton from '@/components/ui/Boton.astro';
+import { sitio, linkWhatsApp } from '@/data/sitio';
+import isotipo from '@/assets/logo/isotipo.svg?raw';
+
+const wa = linkWhatsApp('Hola Nacho, cómo va? Te quería consultar para mezclar mi tema.');
+
+const datos = [
+  { valor: `+${sitio.autor.aniosExperiencia}`, etiqueta: 'años mezclando' },
+  { valor: `+${sitio.autor.cancionesMezcladas}`, etiqueta: 'canciones publicadas' },
+  { valor: '100%', etiqueta: 'a distancia, desde donde estés' },
+];
+---
+
+<!-- overflow-x-clip: la marca de agua se sale del contenedor a propósito, y sin
+     recortarla genera scroll horizontal en pantallas de ~1280 px. Se usa clip y
+     no hidden para no crear un contenedor de scroll. -->
+<section
+  id="inicio"
+  class="contenedor relative overflow-x-clip pt-16 pb-20 sm:pt-24 lg:pt-32 lg:pb-28"
+>
+  <!-- El isotipo como marca de agua. Se corta contra el borde derecho a
+       propósito y se desvanece hacia abajo, para que se lea como una textura de
+       fondo y no como una imagen mal recortada. -->
+  <div
+    class="text-marca/[0.05] pointer-events-none absolute -top-12 right-0 hidden w-[22rem] translate-x-1/3 [mask-image:linear-gradient(to_bottom,black_35%,transparent)] lg:block xl:w-[26rem]"
+    aria-hidden="true"
+    set:html={isotipo}
+  />
+
+  <div class="relative max-w-4xl">
+    <p class="text-marca-clara font-sans text-xs font-semibold tracking-[0.2em] uppercase">
+      Mezcla musical · {sitio.ubicacion.ciudad}, Argentina
+    </p>
+
+    <h1 class="text-titulo text-texto mt-5">
+      Que suene<br />como lo imaginaste
+    </h1>
+
+    <p class="text-bajada text-texto-suave mt-7 max-w-2xl">
+      Mezclo canciones para artistas y productores que ya grabaron y quieren que su tema suene
+      terminado. Más de {sitio.autor.aniosExperiencia} años y {sitio.autor.cancionesMezcladas} canciones
+      aprendiendo a que cada decisión técnica sirva a la intención del artista.
+    </p>
+
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <Boton href="#escuchar" tamanio="grande">Escuchá el antes y después</Boton>
+      <Boton href={wa} variante="secundario" tamanio="grande" nuevaPestania>
+        Pedir presupuesto
+      </Boton>
+    </div>
+  </div>
+
+  <dl
+    class="border-borde relative mt-16 grid grid-cols-2 gap-x-8 gap-y-8 border-t pt-10 sm:grid-cols-3 lg:mt-20"
+  >
+    {
+      datos.map((dato) => (
+        <div>
+          <dt class="sr-only">{dato.etiqueta}</dt>
+          <dd>
+            <span class="fuente-display text-marca block text-4xl sm:text-5xl">{dato.valor}</span>
+            <span class="text-texto-tenue mt-1.5 block text-sm">{dato.etiqueta}</span>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

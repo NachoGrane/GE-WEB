@@ -1,0 +1,9 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  // Dejá que el plugin de Prettier ordene imports; evitá doble ejecución:
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never"
+  }
+}

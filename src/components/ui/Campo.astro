@@ -1,0 +1,95 @@
+---
+/**
+ * Un campo de formulario con su etiqueta.
+ *
+ * Los obligatorios se marcan en el texto de la etiqueta y con el atributo
+ * required; los opcionales lo dicen explícitamente. Decir "opcional" en vez de
+ * marcar los obligatorios con un asterisco reduce el abandono: el visitante ve
+ * de entrada que casi nada es obligatorio.
+ */
+interface Props {
+  nombre: string;
+  etiqueta: string;
+  tipo?: 'text' | 'email' | 'tel' | 'url' | 'date' | 'textarea' | 'select';
+  obligatorio?: boolean;
+  autocomplete?: string;
+  placeholder?: string;
+  opciones?: { valor: string; texto: string }[];
+  ayuda?: string;
+  filas?: number;
+  class?: string;
+}
+
+const {
+  nombre,
+  etiqueta,
+  tipo = 'text',
+  obligatorio = false,
+  autocomplete,
+  placeholder,
+  opciones = [],
+  ayuda,
+  filas = 5,
+  class: clase = '',
+} = Astro.props;
+
+const idAyuda = ayuda ? `${nombre}-ayuda` : undefined;
+
+const estilo =
+  'w-full rounded-lg border border-borde-fuerte bg-fondo px-4 py-3 text-sm text-texto ' +
+  'placeholder:text-texto-tenue transition-colors focus:border-marca focus:outline-none ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-clara';
+---
+
+<div class={clase}>
+  <label for={nombre} class="text-texto mb-2 block text-sm font-medium">
+    {etiqueta}
+    {!obligatorio && <span class="text-texto-tenue ml-1 font-normal">(opcional)</span>}
+  </label>
+
+  {
+    tipo === 'textarea' ? (
+      <textarea
+        id={nombre}
+        name={nombre}
+        rows={filas}
+        required={obligatorio}
+        placeholder={placeholder}
+        aria-describedby={idAyuda}
+        class={`${estilo} resize-y`}
+      />
+    ) : tipo === 'select' ? (
+      <select
+        id={nombre}
+        name={nombre}
+        required={obligatorio}
+        aria-describedby={idAyuda}
+        class={estilo}
+      >
+        <option value="">Elegir…</option>
+        {opciones.map((opcion) => (
+          <option value={opcion.valor}>{opcion.texto}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        id={nombre}
+        name={nombre}
+        type={tipo}
+        required={obligatorio}
+        autocomplete={autocomplete}
+        placeholder={placeholder}
+        aria-describedby={idAyuda}
+        class={estilo}
+      />
+    )
+  }
+
+  {
+    ayuda && (
+      <p id={idAyuda} class="text-texto-tenue mt-2 text-xs">
+        {ayuda}
+      </p>
+    )
+  }
+</div>

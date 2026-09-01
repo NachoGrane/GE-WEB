@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Anton';
+        src: url('FUENTES/anton-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Inter Variable';
+        font-weight: 100 900;
+        src: url('FUENTES/inter-latin-var.woff2') format('woff2-variations');
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        background: #0a0a0a;
+        color: #edeae3;
+        font-family: 'Inter Variable', sans-serif;
+        padding: 72px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .marca-agua {
+        position: absolute;
+        right: -60px;
+        top: -40px;
+        width: 380px;
+        color: #8e8816;
+        opacity: 0.09;
+      }
+      .marca-agua svg {
+        width: 100%;
+        display: block;
+      }
+      .logo {
+        width: 190px;
+        color: #8e8816;
+      }
+      .logo svg {
+        width: 100%;
+        display: block;
+      }
+      h1 {
+        font-family: 'Anton', sans-serif;
+        font-size: 104px;
+        line-height: 0.92;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        max-width: 850px;
+      }
+      .pie {
+        display: flex;
+        align-items: baseline;
+        gap: 40px;
+        font-size: 25px;
+        color: #a8a49b;
+      }
+      .pie b {
+        color: #b5ae2a;
+        font-weight: 600;
+      }
+      .barra {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 10px;
+        width: 100%;
+        background: #8e8816;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="marca-agua">ISOTIPO</div>
+    <div class="logo">LOGOTIPO</div>
+    <h1>Que suene como lo imaginaste</h1>
+    <p class="pie">
+      <span><b>Mezcla musical</b> · La Plata, Argentina</span>
+      <span>+10 años · +100 canciones</span>
+    </p>
+    <div class="barra"></div>
+  </body>
+</html>
